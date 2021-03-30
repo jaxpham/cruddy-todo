@@ -42,15 +42,22 @@ exports.readAll = (callback) => {
   });
 };
 
-
-
 exports.readOne = (id, callback) => {
-  var text = items[id];
-  if (!text) {
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    callback(null, { id, text });
-  }
+  //read the file in the directory
+  //if error throw an error
+  //else,
+  // return an object of id and text
+  //apply callback to the return statement
+  // callback(null, data);
+  fs.readFile(`${exports.dataDir}/${id}.txt`, 'utf8', (err, fileData) => {
+    if (err) {
+      callback(new Error(`No item with id: ${id}`));
+    } else {
+      // console.log('this is our DATA', fileData);
+      var data = {id, text: fileData};
+      callback(null, data);
+    }
+  });
 };
 
 exports.update = (id, text, callback) => {
