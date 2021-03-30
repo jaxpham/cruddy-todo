@@ -5,36 +5,44 @@ const counter = require('./counter');
 
 
 // Public API - Fix these CRUD functions ///////////////////////////////////////
-
 exports.create = (text, callback) => {
   counter.getNextUniqueId((err, id) => {
     if (err) {
       throw ('error writing id');
     } else {
-      var name = `${exports.dataDir}/${id.toString()}.txt`;
-      fs.writeFile(name, text,
-        (err) => {
-          if (err) {
-            throw ('error writing file');
-          } else {
-            callback(null, text);
-          }
-        });
+      fs.writeFile(`${exports.dataDir}/${id}.txt`, text, (err) => {
+        if (err) {
+          throw ('error writing file');
+        } else {
+          callback(null, {id, text});
+        }
+      });
     }
   });
-
-  // 1) should create a new file for each todo
-  // 2) should use the generated unique id as the filename
-  // 3) should only save todo text contents in file
-  // 4) should pass a todo object to the callback on success
 };
 
 exports.readAll = (callback) => {
-  var data = _.map(items, (text, id) => {
-    return { id, text };
+  // var data = _.map(items, (text, id) => {
+  //   return { id, text };
+  // });
+
+  // Find the names of the files in the directory (fs.readdir)
+  // Read through file names and returns array of file namnes
+  // Proceed to map over the array and invoke a callBack on each item in the array
+  fs.readdir (exports.dataDir, (err, files) => {
+    if (err) {
+      throw ('error be tharrrgh');
+    } else {
+      var data = files.map(text => {
+        var id = text.slice(0, -4);
+        return {id, text: id};
+      });
+      callback(null, data);
+    }
   });
-  callback(null, data);
 };
+
+
 
 exports.readOne = (id, callback) => {
   var text = items[id];
