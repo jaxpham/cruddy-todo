@@ -1,16 +1,24 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require('fs'); // fs module provides a lot of very useful functionality to access and interact with the file system.
+const path = require('path'); //The path module provides utilities for working with file and directory paths. It can be accessed using:
 const _ = require('underscore');
 const counter = require('./counter');
 
-var items = {};
 
 // Public API - Fix these CRUD functions ///////////////////////////////////////
 
 exports.create = (text, callback) => {
-  var id = counter.getNextUniqueId();
-  items[id] = text;
-  callback(null, { id, text });
+  counter.getNextUniqueId((err, id) => {
+    if (err) {
+      throw ('error writing id');
+    } else {
+      callback(null, {[id]: text});
+    }
+  });
+
+  // 1) should create a new file for each todo
+  // 2) should use the generated unique id as the filename
+  // 3) should only save todo text contents in file
+  // 4) should pass a todo object to the callback on success
 };
 
 exports.readAll = (callback) => {
