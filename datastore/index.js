@@ -11,7 +11,15 @@ exports.create = (text, callback) => {
     if (err) {
       throw ('error writing id');
     } else {
-      callback(null, {[id]: text});
+      var name = `${exports.dataDir}/${id.toString()}.txt`;
+      fs.writeFile(name, text,
+        (err) => {
+          if (err) {
+            throw ('error writing file');
+          } else {
+            callback(null, text);
+          }
+        });
     }
   });
 

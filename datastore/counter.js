@@ -48,8 +48,8 @@ exports.getNextUniqueId = (cb) => {
   readCounter((err, counter)=> {
     counter += 1;
     writeCounter(counter, (err, counterString) => {
-      // cb(err, counterString);
-      console.log('THis is getting runned');
+      cb(err, counterString);
+      // console.log('THis is getting runned');
     });
   });
 };
